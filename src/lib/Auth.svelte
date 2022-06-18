@@ -1,37 +1,62 @@
 <script>
-  import {supabase} from "$lib/supabaseClient"
+    import {supabase} from "$lib/supabaseClient"
 
-  let loading = false
-  let email;
+    let loading = false
+    let email;
 
-  const handleLogin = async () => {
-    try {
-      loading = true
-      const { error } = await supabase.auth.signIn({ email })
-      if (error) throw error
-      alert('Check your email for the login link!')
-    } catch (error) {
-      alert(error.error_description || error.message)
-    } finally {
-      loading = false
+    const handleLogin = async () => {
+        try {
+            loading = true
+            const { error } = await supabase.auth.signIn({ email })
+            if (error) throw error
+            alert('Check your email for the login link!')
+        } catch (error) {
+            alert(error.error_description || error.message)
+        } finally {
+            loading = false
+        }
     }
-  }
 </script>
 
-<form class="row flex flex-center" on:submit|preventDefault={handleLogin}>
-  <div class="col-6 form-widget">
-    <h1 class="header">Supabase + Svelte</h1>
-    <p class="description">Sign in via magic link with your email below</p>
-    <div>
-      <input
-        class="inputField"
-        type="email"
-        placeholder="Your email"
-        bind:value={email}
-      />
+<div class="row backgroundimg g-0">
+    <div class="container d-flex align-items-center">
+        <div class="container">
+            <div class="row g-0">
+                <div class="col display-1 text-white text-center">Welcome to Human Flourishing</div>
+            </div>
+            <div class="row g-0">
+                <div class="col text-white text-center p-5">
+                    HF makes the work a better place by helping you do the things that make you happiest.
+                </div>
+            </div>
+            <div class="row g-0 p-3">
+                <div class="d-flex justify-content-center">
+                    <form class="row row-cols-lg-auto g-3 align-items-center" on:submit|preventDefault={handleLogin}>
+                        <div class="col-12">
+                            <input
+                                    class="inputField form-control"
+                                    type="email"
+                                    placeholder="Your email"
+                                    bind:value={email}
+                            />
+                        </div>
+                        <div class="col-12 text-center">
+                            <input type="submit" class='btn btn-primary btn-' value={loading ? "Loading" : "Sign in/up"} disabled={loading} />
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
-    <div>
-      <input type="submit" class='button block' value={loading ? "Loading" : "Send magic link"} disabled={loading} />
-    </div>
-  </div>
-</form>
+</div>
+
+<style>
+    .backgroundimg {
+        background-image: url("/lighthouse.jpg");
+        background-size: cover;
+        background-position: center center;
+        background-repeat: no-repeat;
+        height: 100vh;
+        width: 100%
+    }
+</style>
