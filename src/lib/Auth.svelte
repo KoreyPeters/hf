@@ -5,6 +5,7 @@
     let email;
 
     const handleLogin = async () => {
+        console.log("Here")
         try {
             loading = true
             const { error } = await supabase.auth.signIn({ email })
