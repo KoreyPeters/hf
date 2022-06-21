@@ -9,14 +9,17 @@
 
   async function getActivities() {
     try {
+      const user = supabase.auth.user()
       loading = true
       let { data, error, status } = await supabase
               .from('activities')
               .select("*")
+              .eq('user_id', user.id)
 
       if (error && status !== 406) throw error
 
       if (data) {
+        console.log(data)
         return data
       }
     } catch (error) {
@@ -29,10 +32,12 @@
 
   async function getEvents() {
     try {
+      const user = supabase.auth.user()
       loading = true
       let { data, error, status } = await supabase
               .from('events')
               .select('*')
+              .eq('organizer_id', user.id)
 
       if (error && status !== 406) throw error
 
@@ -158,7 +163,7 @@
     </div>
   </form>
 
-  <a href="/users/{supabase.auth.user().id}" class="btn btn-primary">Show your QR Code to attend an event</a>
+  <a href="/users/{username}/{supabase.auth.user().id}" class="btn btn-primary">Show your QR Code to attend an event</a>
 
   <p class="mt-5">Click here to start an event. An event is any gathering of 2 or more people.</p>
   <a href="/events" class="btn btn-primary btn-lg">Start an event</a>
@@ -205,7 +210,6 @@
         </tr>
         </thead>
         <tbody>
-
         {#each events as event}
           <tr>
             <td><a href="/events/{event.id}">{event.created_at}</a></td>
