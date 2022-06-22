@@ -27,7 +27,7 @@
             </div>
             <div class="row g-0">
                 <div class="col text-white text-center p-5">
-                    HF makes the work a better place by helping you do the things that make you happiest.
+                    HF makes the world a better place by helping you do the things that make you happiest.
                 </div>
             </div>
             <div class="row g-0 p-3">
