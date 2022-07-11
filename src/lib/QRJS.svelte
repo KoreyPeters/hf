@@ -32,7 +32,7 @@
     #qrcode {
         width:20px;
         height:200px;
-        margin-top:15px;
+        margin: 15px;
     }
 </style>
 
