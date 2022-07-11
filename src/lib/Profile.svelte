@@ -6,6 +6,7 @@
   let username = null
   let website = null
   let avatar_url = null
+  let points = null
 
   async function getActivities() {
     try {
@@ -59,7 +60,7 @@
 
       let { data, error, status } = await supabase
               .from('profiles')
-              .select(`username, website, avatar_url`)
+              .select(`username, website, avatar_url, points`)
               .eq('id', user.id)
               .single()
 
@@ -69,6 +70,7 @@
         username = data.username
         website = data.website
         avatar_url = data.avatar_url
+        points = data.points
       }
     } catch (error) {
       alert(error.message)
@@ -118,50 +120,65 @@
 </script>
 
 <div class="container">
-  <div class="display-3">Human Flourishing</div>
-  <form use:getProfile on:submit|preventDefault={updateProfile}>
-    <div class="row mb-3 mt-5">
-      <label for="email" class="col-sm-2 col-form-label">Email</label>
-      <div class="col-sm-10">
-        <input id="email" type="text" class="form-control" value={$user.email} disabled />
-      </div>
-    </div>
-    <div class="row mb-3">
-      <label for="username" class="col-sm-2 col-form-label">Name</label>
-      <div class="col-sm-10">
-        <input
-                id="username"
-                type="text"
-                bind:value={username}
-                class="form-control"
-        />
-      </div>
-    </div>
-    <div class="row mb-3">
-      <label for="website" class="col-sm-2 col-form-label">Website</label>
-      <div class="col-sm-10">
-        <input
-                id="website"
-                type="website"
-                bind:value={website}
-                class="form-control"
-        />
+  <div class="display-3 pb-5">Human Flourishing</div>
+  <div class="row">
+    <div class="col-md m-3 d-flex align-items-center justify-content-center">
+      <div class="display-1 text-center">
+        {#if points !== null}
+          {points}
+        {:else}
+          <i class="fa fa-spinner fa-pulse fa-fw" aria-hidden="true"/>
+        {/if}
       </div>
     </div>
 
-    <div class="d-flex justify-content-between">
+    <div class="col">
+      <form use:getProfile on:submit|preventDefault={updateProfile}>
+        <div class="row mb-3 mt-5">
+          <label for="email" class="col-sm-2 col-form-label">Email</label>
+          <div class="col-sm-10">
+            <input id="email" type="text" class="form-control" value={$user.email} disabled />
+          </div>
+        </div>
+        <div class="row mb-3">
+          <label for="username" class="col-sm-2 col-form-label">Name</label>
+          <div class="col-sm-10">
+            <input
+                    id="username"
+                    type="text"
+                    bind:value={username}
+                    class="form-control"
+            />
+          </div>
+        </div>
+        <div class="row mb-3">
+          <label for="website" class="col-sm-2 col-form-label">Website</label>
+          <div class="col-sm-10">
+            <input
+                    id="website"
+                    type="website"
+                    bind:value={website}
+                    class="form-control"
+            />
+          </div>
+        </div>
 
-      <div>
-        <input type="submit" class="btn btn-primary" value={loading ? 'Loading ...' : 'Update'} disabled={loading}/>
-      </div>
+        <div class="d-flex justify-content-between">
 
-      <div>
-        <button class="btn btn-outline-primary my-5" on:click={signOut} disabled={loading}>
-          Sign Out
-        </button>
-      </div>
+          <div>
+            <input type="submit" class="btn btn-primary" value={loading ? 'Loading ...' : 'Update'} disabled={loading}/>
+          </div>
+
+          <div>
+            <button class="btn btn-outline-primary my-5" on:click={signOut} disabled={loading}>
+              Sign Out
+            </button>
+          </div>
+        </div>
+      </form>
     </div>
-  </form>
+
+  </div>
 
   <a href="/users/{username}/{supabase.auth.user().id}" class="btn btn-primary">Show your QR Code to attend an event</a>
 
