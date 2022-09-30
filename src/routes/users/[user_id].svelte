@@ -83,8 +83,7 @@
 		<h1 class="mb-5">QR Code for {$username}</h1>
 		{#if user.id === user_id}
 			<p>Have the event organizer scan this code to attend the event</p>
-			{$page.url}
-			<QRCode codeValue={$page.url} squareSize="200" />
+			<QRCode codeValue={$page.url.href} squareSize="200" />
 		{:else}
 			{#await getOrganizerEvents()}
 				<p>Getting your events...</p>
