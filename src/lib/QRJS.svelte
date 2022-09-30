@@ -33,6 +33,7 @@
         width:20px;
         height:200px;
         margin-top:15px;
+        padding: 10px;
     }
 </style>
 

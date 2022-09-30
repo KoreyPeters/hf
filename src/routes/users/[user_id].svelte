@@ -1,16 +1,16 @@
 <script context="module">
-    export async function load({params}){
-        return {props: {username: params.username, user_id: params.user_id}}
+    export async function load({params}) {
+        return {props: {user_id: params.user_id}}
     }
 </script>
 
 <script>
     import {supabase} from "$lib/supabaseClient"
     import QRCode from "$lib/QRJS.svelte"
-    import { page } from "$app/stores"
+    import {page} from "$app/stores"
+    import {username} from "$lib/sessionStore";
 
     export let user_id
-    export let username
 
     let loading = true
     let previousAttendance = false
@@ -20,7 +20,7 @@
         try {
             const user = supabase.auth.user()
 
-            let { data, error, status } = await supabase
+            let {data, error, status} = await supabase
                 .from('events')
                 .select(`id, name`)
                 .eq('organizer_id', user.id)
@@ -38,13 +38,13 @@
 
     async function getPreviousAttendance(eventId, userId) {
         console.log(eventId, userId)
-        let { data: activities, error } = await supabase
+        let {data: activities, error} = await supabase
             .from('activities')
             .select('id')
             .eq('user_id', userId)
             .eq('entity_id', eventId)
 
-        if (error){
+        if (error) {
             alert(error.message)
         } else {
             console.log(activities)
@@ -53,7 +53,7 @@
         }
     }
 
-    async function registerAttendee(eventId, userId){
+    async function registerAttendee(eventId, userId) {
         console.log(eventId, userId)
         try {
             const updates = {
@@ -64,7 +64,7 @@
                 entity_id: eventId
             }
 
-            let { error } = await supabase.from('activities').insert(updates, {
+            let {error} = await supabase.from('activities').insert(updates, {
                 returning: 'minimal', // Don't return the value after inserting
             })
 
@@ -80,10 +80,10 @@
 
 <div class="container">
     {#if user}
-        <h1 class="mb-5">QR Code for {username}</h1>
+        <h1 class="mb-5">QR Code for {$username}</h1>
         {#if user.id === user_id}
             <p>Have the event organizer scan this code to attend the event</p>
-            <QRCode codeValue={$page.url} squareSize="400" />
+            <QRCode codeValue={$page.url} squareSize="200"/>
         {:else}
             {#await getOrganizerEvents()}
                 <p>Getting your events...</p>
@@ -94,7 +94,9 @@
                     {#if previousAttendance}
                         <h4>{username} is attending this event!</h4>
                     {:else}
-                        <button class="btn btn-primary" on:click={() => registerAttendee(event.id, user_id)}>Click here to register this attendee</button>
+                        <button class="btn btn-primary" on:click={() => registerAttendee(event.id, user_id)}>Click here
+                            to register this attendee
+                        </button>
                     {/if}
                 {/await}
             {/await}

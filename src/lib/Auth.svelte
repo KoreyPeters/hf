@@ -8,7 +8,7 @@
         console.log("Here")
         try {
             loading = true
-            const { error } = await supabase.auth.signIn({ email })
+            const {error} = await supabase.auth.signIn({email}, {redirectTo: window.location.origin})
             if (error) throw error
             alert('Check your email for the login link!')
         } catch (error) {
@@ -42,7 +42,8 @@
                             />
                         </div>
                         <div class="col-12 text-center">
-                            <input type="submit" class='btn btn-primary btn-' value={loading ? "Loading" : "Sign in/up"} disabled={loading} />
+                            <input type="submit" class='btn btn-primary btn-' value={loading ? "Loading" : "Sign in/up"}
+                                   disabled={loading}/>
                         </div>
                     </form>
                 </div>
